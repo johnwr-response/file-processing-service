@@ -9,7 +9,10 @@ import org.springframework.jms.support.converter.MessageType;
 
 @Configuration
 public class JmsConfig {
-    public static final String FILE_PROCESSING_JOB_TOPIC = "file-processing-job";
+    public static final String FILE_PROCESSING_JOB_QUEUE = "file-processing-job";
+    public static final String IMAGE_METADATA_EXTRACTOR_JOB_QUEUE = "image-metadata-extractor-job";
+    public static final String IMAGE_DUPLICATE_DETECTION_JOB_QUEUE = "image-duplicate-detection-job";
+    public static final String IMAGE_FACE_DETECTION_JOB_QUEUE = "image-face-detection-job";
 
     @Bean // Serialize message content to json using TextMessage
     public MessageConverter jacksonJmsMessageConverter(ObjectMapper objectMapper) {
