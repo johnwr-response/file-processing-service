@@ -20,16 +20,20 @@ public class FileProcessingJobListener {
         if (fileProcessingJobDto!=null) {
             FileProcessingJobForwarderConfig config = fileProcessingJobDto.getConfig();
             FileItemDto fileItemDto = fileProcessingJobDto.getFileItemDto();
-            if (fileItemDto!=null && fileItemDto.getId()!=null && config != null) {
+            log.info("{} operation for file id: {}. Config : {}", fileProcessingJobDto.getFileStoreRequestType(), fileItemDto.getId(), config);
+            if (fileItemDto.getId()!=null && config != null) {
                 if (config.isMetadataExtractor()) {
+                    log.info("Sending {} to metadata extraction. ", fileItemDto.getFilename());
                     forwardMessage(JmsConfig.IMAGE_METADATA_EXTRACTOR_JOB_QUEUE, fileItemDto);
                 }
                 if (config.isDuplicateDetection()) {
+                    log.info("Sending {} to duplicate detection. ", fileItemDto.getFilename());
                     forwardMessage(JmsConfig.IMAGE_DUPLICATE_DETECTION_JOB_QUEUE, ImageDuplicateDetectionJobDto.builder()
-                            .fileItemIdQuery(fileItemDto.getId())
+                            .fileItemDto(fileItemDto)
                             .build());
                 }
                 if (config.isFaceDetection()) {
+                    log.info("Sending {} to face recognition. ", fileItemDto.getFilename());
                     forwardMessage(JmsConfig.IMAGE_FACE_DETECTION_JOB_QUEUE, ImageFaceDetectionJobDto.builder()
                             .fileItemId(fileItemDto.getId())
                             .build());
